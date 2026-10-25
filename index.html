@@ -1,0 +1,204 @@
+<!doctype html>
+<html lang="uk">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Барбершоп «Лезо»</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Alumni+Sans:wght@500;700;800&family=Manrope:wght@400;500;700&family=JetBrains+Mono:wght@500&display=swap">
+<style>
+/* Layout: dark barbershop interior — tall condensed headings, brass details, a barber-pole stripe as the section divider */
+:root{
+  --bg:#eef0eb; --surface:#ffffff; --fg:#14211e; --muted:#58665f; --line:#cfd6cf;
+  --brass:#9a6f22; --brass-ink:#ffffff; --stripe-red:#a8322b; --stripe-blue:#1f4f7a;
+  --display:"Alumni Sans","Arial Narrow",sans-serif;
+  --body:"Manrope",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --mono:"JetBrains Mono",ui-monospace,Menlo,monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#101b19; --surface:#17241f; --fg:#ece8df; --muted:#9aa79f; --line:#2a3a35;
+  --brass:#d0a457; --brass-ink:#14211e; --stripe-red:#c2463d; --stripe-blue:#4a7fae; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#101b19; --surface:#17241f; --fg:#ece8df; --muted:#9aa79f; --line:#2a3a35;
+  --brass:#d0a457; --brass-ink:#14211e; --stripe-red:#c2463d; --stripe-blue:#4a7fae; color-scheme:dark}
+
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--fg);font-family:var(--body);font-size:16px;line-height:1.6}
+.wrap{max-width:1080px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+h1,h2,h3{font-family:var(--display);font-weight:800;line-height:.95;text-wrap:balance;margin:0;text-transform:uppercase;letter-spacing:.01em}
+h2{font-size:clamp(2.6rem,6vw,3.6rem)}
+p{margin:0}
+a{color:inherit}
+.label{font-size:.75rem;letter-spacing:.14em;text-transform:uppercase;color:var(--brass);font-weight:700}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;background:var(--brass);color:var(--brass-ink);font-weight:700;text-decoration:none;border:0;border-radius:2px;padding:14px 26px;font-size:1rem;cursor:pointer;font-family:var(--body)}
+.btn:hover{filter:brightness(1.08)}
+.btn.ghost{background:transparent;color:var(--fg);border:1px solid var(--line)}
+:focus-visible{outline:2px solid var(--brass);outline-offset:3px}
+
+/* header */
+header.top{border-bottom:1px solid var(--line)}
+header.top .wrap{display:flex;align-items:center;justify-content:space-between;gap:16px;padding-block:18px;flex-wrap:wrap}
+.logo{font-family:var(--display);font-size:2rem;font-weight:800;letter-spacing:.04em;text-decoration:none}
+.logo span{color:var(--brass)}
+nav{display:flex;gap:22px;flex-wrap:wrap;font-size:.95rem}
+nav a{text-decoration:none;color:var(--muted)}
+nav a:hover{color:var(--fg)}
+
+/* hero */
+.hero .wrap{display:grid;grid-template-columns:1.2fr .8fr;gap:48px;padding-block:72px 64px;align-items:end}
+.hero h1{font-size:clamp(4rem,11vw,8.5rem)}
+.hero h1 em{font-style:normal;color:var(--brass)}
+.hero-copy{display:flex;flex-direction:column;gap:22px;min-width:0}
+.hero-copy p{max-width:44ch;color:var(--muted);font-size:1.1rem}
+.hero-actions{display:flex;gap:12px;flex-wrap:wrap}
+.today{background:var(--surface);border:1px solid var(--line);padding:24px;display:flex;flex-direction:column;gap:14px}
+.today .slots{display:flex;flex-wrap:wrap;gap:8px}
+.today .slot{font-family:var(--mono);font-size:.9rem;padding:6px 10px;border:1px solid var(--line)}
+.today .slot.busy{color:var(--muted);text-decoration:line-through;opacity:.6}
+
+.pole{height:10px;background:repeating-linear-gradient(-45deg,var(--stripe-red) 0 14px,var(--bg) 14px 22px,var(--stripe-blue) 22px 36px,var(--bg) 36px 44px)}
+
+section{padding-block:80px}
+.head{display:flex;justify-content:space-between;align-items:end;gap:24px;flex-wrap:wrap;margin-bottom:40px}
+.head p{max-width:46ch;color:var(--muted)}
+
+/* price list */
+.prices{display:grid;grid-template-columns:1fr 1fr;gap:0 56px}
+.price{display:grid;grid-template-columns:1fr auto;gap:4px 16px;padding-block:18px;border-bottom:1px solid var(--line)}
+.price h3{font-size:1.7rem;font-weight:700}
+.price .cost{font-family:var(--mono);font-size:1.1rem;font-variant-numeric:tabular-nums;align-self:center;grid-row:span 2}
+.price .meta{color:var(--muted);font-size:.9rem}
+
+/* masters */
+.masters{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
+.master{display:flex;flex-direction:column;gap:12px}
+.portrait{aspect-ratio:4/5;max-width:100%;background:var(--surface);border:1px solid var(--line);display:grid;place-items:center;font-family:var(--display);font-size:5rem;font-weight:800;color:var(--brass)}
+.master h3{font-size:1.9rem}
+.master .meta{color:var(--muted);font-size:.92rem}
+
+/* reviews */
+.reviews{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
+blockquote{margin:0;border-top:2px solid var(--brass);padding-top:18px;display:flex;flex-direction:column;gap:12px}
+blockquote footer{color:var(--muted);font-size:.9rem}
+
+/* booking */
+.book{background:var(--surface);border-block:1px solid var(--line)}
+.book .wrap{display:grid;grid-template-columns:.9fr 1.1fr;gap:56px}
+.info{display:flex;flex-direction:column;gap:28px}
+.hours{width:100%;border-collapse:collapse;font-variant-numeric:tabular-nums}
+.hours td{padding:8px 0;border-bottom:1px solid var(--line)}
+.hours td:last-child{text-align:right;font-family:var(--mono)}
+form{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.field{display:flex;flex-direction:column;gap:6px;min-width:0}
+.field.full{grid-column:1/-1}
+label{font-size:.85rem;font-weight:700}
+input,select{font:inherit;color:var(--fg);background:var(--bg);border:1px solid var(--line);border-radius:2px;padding:12px;width:100%}
+.done{grid-column:1/-1;border:1px solid var(--brass);padding:16px}
+footer.bottom .wrap{padding-block:32px;display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;color:var(--muted);font-size:.9rem}
+
+@media (max-width:760px){
+  .hero .wrap,.book .wrap{grid-template-columns:1fr;gap:36px}
+  .prices,.masters,.reviews{grid-template-columns:1fr}
+  form{grid-template-columns:1fr}
+  section{padding-block:56px}
+  nav{display:none}
+}
+@media (prefers-reduced-motion:no-preference){html{scroll-behavior:smooth}}
+</style>
+</head>
+<body>
+
+<header class="top"><div class="wrap">
+  <a class="logo" href="#top">ЛЕЗО<span>.</span></a>
+  <nav><a href="#prices">Послуги</a><a href="#masters">Майстри</a><a href="#reviews">Відгуки</a><a href="#book">Запис</a></nav>
+  <a class="btn" href="#book">Записатися</a>
+</div></header>
+
+<main id="top">
+<div class="hero"><div class="wrap">
+  <div class="hero-copy">
+    <span class="label">Чоловічі стрижки · гоління · борода</span>
+    <h1>Стрижка, після якої <em>не треба</em> укладки</h1>
+    <p>Три майстри, гаряче гоління небезпечною бритвою і кава, поки чекаєте. Працюємо щодня з 9:00 до 21:00.</p>
+    <div class="hero-actions"><a class="btn" href="#book">Обрати час</a><a class="btn ghost" href="#prices">Ціни</a></div>
+  </div>
+  <aside class="today" aria-label="Вільний час сьогодні">
+    <span class="label">Вільно сьогодні</span>
+    <div class="slots">
+      <span class="slot busy">10:00</span><span class="slot">11:30</span><span class="slot busy">13:00</span>
+      <span class="slot">14:30</span><span class="slot">16:00</span><span class="slot busy">17:30</span><span class="slot">19:00</span>
+    </div>
+    <p class="meta" style="color:var(--muted);font-size:.9rem">Стрижка триває 45–60 хв. Можна прийти без запису, якщо майстер вільний.</p>
+  </aside>
+</div></div>
+
+<div class="pole" role="presentation"></div>
+
+<section id="prices"><div class="wrap">
+  <div class="head"><h2>Послуги і ціни</h2><p>Ціна не змінюється в день візиту. Миття голови та укладка входять у кожну стрижку.</p></div>
+  <div class="prices">
+    <div class="price"><h3>Чоловіча стрижка</h3><span class="cost">450 ₴</span><span class="meta">60 хв · ножиці та машинка</span></div>
+    <div class="price"><h3>Стрижка машинкою</h3><span class="cost">300 ₴</span><span class="meta">30 хв · одна насадка</span></div>
+    <div class="price"><h3>Фейд</h3><span class="cost">500 ₴</span><span class="meta">60 хв · плавний перехід</span></div>
+    <div class="price"><h3>Моделювання бороди</h3><span class="cost">300 ₴</span><span class="meta">30 хв · контур і форма</span></div>
+    <div class="price"><h3>Королівське гоління</h3><span class="cost">400 ₴</span><span class="meta">45 хв · гарячий рушник, бритва</span></div>
+    <div class="price"><h3>Стрижка + борода</h3><span class="cost">650 ₴</span><span class="meta">90 хв · найпопулярніше</span></div>
+    <div class="price"><h3>Дитяча стрижка</h3><span class="cost">300 ₴</span><span class="meta">40 хв · до 12 років</span></div>
+    <div class="price"><h3>Камуфляж сивини</h3><span class="cost">350 ₴</span><span class="meta">30 хв · природний відтінок</span></div>
+  </div>
+</div></section>
+
+<div class="pole" role="presentation"></div>
+
+<section id="masters"><div class="wrap">
+  <div class="head"><h2>Майстри</h2><p>Оберіть майстра при записі або залиште вибір нам.</p></div>
+  <div class="masters">
+    <div class="master"><div class="portrait" aria-hidden="true">А</div><h3>Андрій</h3><p class="meta">Старший барбер · 8 років досвіду · класичні стрижки та гоління</p></div>
+    <div class="master"><div class="portrait" aria-hidden="true">М</div><h3>Максим</h3><p class="meta">Барбер · 5 років · фейди та текстурні стрижки</p></div>
+    <div class="master"><div class="portrait" aria-hidden="true">Д</div><h3>Денис</h3><p class="meta">Барбер · 3 роки · борода і дитячі стрижки</p></div>
+  </div>
+</div></section>
+
+<section id="reviews" style="padding-top:0"><div class="wrap">
+  <div class="head"><h2>Відгуки</h2><p>Приклади відгуків для демо-версії сайту.</p></div>
+  <div class="reviews">
+    <blockquote><p>Ходжу до Андрія вже рік. Стрижка тримає форму три тижні, а не три дні.</p><footer>Приклад відгуку</footer></blockquote>
+    <blockquote><p>Записався онлайн на 19:00, прийняли хвилина в хвилину. Борода нарешті рівна.</p><footer>Приклад відгуку</footer></blockquote>
+    <blockquote><p>Привів сина, Денис знайшов з ним спільну мову за дві хвилини.</p><footer>Приклад відгуку</footer></blockquote>
+  </div>
+</div></section>
+
+<section id="book" class="book"><div class="wrap">
+  <div class="info">
+    <h2>Запис</h2>
+    <p style="color:var(--muted)">Залиште заявку, і майстер підтвердить час у месенджері протягом 15 хвилин.</p>
+    <table class="hours" aria-label="Графік роботи">
+      <tr><td>Пн–Пт</td><td>9:00–21:00</td></tr>
+      <tr><td>Сб</td><td>10:00–20:00</td></tr>
+      <tr><td>Нд</td><td>10:00–18:00</td></tr>
+    </table>
+    <div><span class="label">Адреса</span><p>вул. Центральна, 14 · 2 хв від зупинки «Площа»</p></div>
+    <div><span class="label">Телефон</span><p style="font-family:var(--mono)">+380 00 000 00 00</p></div>
+  </div>
+  <form id="bookForm">
+    <div class="field full"><label for="name">Ім'я</label><input id="name" required placeholder="Олександр"></div>
+    <div class="field"><label for="phone">Телефон</label><input id="phone" type="tel" required placeholder="+380"></div>
+    <div class="field"><label for="service">Послуга</label>
+      <select id="service"><option>Чоловіча стрижка — 450 ₴</option><option>Фейд — 500 ₴</option><option>Стрижка + борода — 650 ₴</option><option>Моделювання бороди — 300 ₴</option><option>Королівське гоління — 400 ₴</option></select></div>
+    <div class="field"><label for="master">Майстер</label>
+      <select id="master"><option>Будь-який вільний</option><option>Андрій</option><option>Максим</option><option>Денис</option></select></div>
+    <div class="field"><label for="date">Дата</label><input id="date" type="date" required></div>
+    <div class="field full"><button class="btn" type="submit">Надіслати заявку</button></div>
+    <p class="done" id="done" hidden>Заявку прийнято. Це демо-версія сайту, тому заявка нікуди не надсилається.</p>
+  </form>
+</div></section>
+</main>
+
+<footer class="bottom"><div class="wrap"><span>© Барбершоп «Лезо»</span><span>Демо-сайт для портфоліо</span></div></footer>
+
+<script>
+const f=document.getElementById('bookForm');
+try{const d=new Date();document.getElementById('date').min=d.toISOString().slice(0,10);}catch(e){}
+f.addEventListener('submit',e=>{e.preventDefault();document.getElementById('done').hidden=false;});
+</script>
+</body>
+</html>
