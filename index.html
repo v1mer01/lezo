@@ -35,7 +35,8 @@ a{color:inherit}
 :focus-visible{outline:2px solid var(--brass);outline-offset:3px}
 
 /* header */
-header.top{border-bottom:1px solid var(--line)}
+header.top{border-bottom:1px solid var(--line);position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:color-mix(in srgb,var(--bg) 90%,transparent);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:21;background:var(--bg)}
 header.top .wrap{display:flex;align-items:center;justify-content:space-between;gap:16px;padding-block:18px;flex-wrap:wrap}
 .logo{font-family:var(--display);font-size:2rem;font-weight:800;letter-spacing:.04em;text-decoration:none}
 .logo span{color:var(--brass)}
@@ -102,7 +103,33 @@ footer.bottom .wrap{padding-block:32px;display:flex;justify-content:space-betwee
   section{padding-block:56px}
   nav{display:none}
 }
-@media (prefers-reduced-motion:no-preference){html{scroll-behavior:smooth}}
+/* motion: transform/opacity only; the barber pole is the one ambient detail */
+.btn{transition:transform .2s ease,filter .2s ease}
+.btn:hover{transform:translateY(-2px)}
+.price .cost{transition:color .2s ease,transform .2s ease}
+.price:hover .cost{color:var(--brass);transform:translateX(-4px)}
+.master .portrait{transition:transform .35s ease,border-color .35s ease}
+.master:hover .portrait{transform:scale(1.02);border-color:var(--brass)}
+.hero h1 em{background:linear-gradient(var(--brass),var(--brass)) 0 92%/0 6px no-repeat;padding-bottom:4px}
+@media (prefers-reduced-motion:no-preference){
+  html{scroll-behavior:smooth}
+  .pole{background-size:62px 100%;animation:pole 6s linear infinite}
+  .hero-copy > *{animation:rise .8s ease-out both}
+  .hero-copy > *:nth-child(2){animation-delay:.12s}
+  .hero-copy > *:nth-child(3){animation-delay:.35s}
+  .hero-copy > *:nth-child(4){animation-delay:.5s}
+  .hero h1 em{animation:underline .9s cubic-bezier(.6,.1,.2,1) .9s forwards}
+  .today{animation:rise .9s ease-out .6s both}
+  .today .slot{animation:pop .45s ease-out both}
+  .today .slot:nth-child(1){animation-delay:.9s}.today .slot:nth-child(2){animation-delay:.98s}.today .slot:nth-child(3){animation-delay:1.06s}.today .slot:nth-child(4){animation-delay:1.14s}.today .slot:nth-child(5){animation-delay:1.22s}.today .slot:nth-child(6){animation-delay:1.3s}.today .slot:nth-child(7){animation-delay:1.38s}
+  .js .reveal{opacity:.15;transform:translateY(22px);transition:opacity .7s ease,transform .7s cubic-bezier(.2,.7,.2,1)}
+  .js .reveal.in{opacity:1;transform:none}
+}
+@media (prefers-reduced-motion:reduce){.btn:hover,.master:hover .portrait{transform:none}.hero h1 em{background-size:100% 6px}}
+@keyframes rise{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+@keyframes pop{from{opacity:0;transform:scale(.8)}to{opacity:1;transform:none}}
+@keyframes underline{to{background-size:100% 6px}}
+@keyframes pole{to{background-position:62px 0}}
 </style>
 </head>
 <body>
@@ -199,6 +226,22 @@ footer.bottom .wrap{padding-block:32px;display:flex;justify-content:space-betwee
 const f=document.getElementById('bookForm');
 try{const d=new Date();document.getElementById('date').min=d.toISOString().slice(0,10);}catch(e){}
 f.addEventListener('submit',e=>{e.preventDefault();document.getElementById('done').hidden=false;});
+(function(){
+  var reduce=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if(reduce||!('IntersectionObserver' in window))return;
+  document.documentElement.classList.add('js');
+  var els=document.querySelectorAll('section .head, .price, .master, blockquote, .info, form');
+  els.forEach(function(el){
+    el.classList.add('reveal');
+    if(el.classList.contains('master')||el.tagName==='BLOCKQUOTE'||el.classList.contains('price')){
+      var i=Array.prototype.indexOf.call(el.parentElement.children,el);
+      el.style.transitionDelay=(el.classList.contains('price')?(i%2)*0.08+Math.floor(i/2)*0.05:i*0.12)+'s';
+    }
+  });
+  var io=new IntersectionObserver(function(en){en.forEach(function(e){if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);}});},{rootMargin:'0px 0px -8% 0px',threshold:0.12});
+  els.forEach(function(el){io.observe(el);});
+  setTimeout(function(){els.forEach(function(el){el.classList.add('in');});},4000);
+})();
 </script>
 </body>
 </html>
